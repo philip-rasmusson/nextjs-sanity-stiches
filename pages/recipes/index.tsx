@@ -2,6 +2,7 @@ import { styled } from '@stitches/react'
 import type { NextPage } from 'next'
 import Link from 'next/link'
 import { sanityClient, urlFor } from '../../lib/sanity'
+import { CommonLayout } from '../../styles/Layout/Layout'
 
 const recipesQuery = `*[_type == "recipe"]{
   _id,
@@ -22,15 +23,15 @@ export async function getStaticProps() {
 
 const Home: NextPage = ({ recipes }: any) => {
   return (
-    <div>
-      {recipes.map(({ slug, name, _id, mainImage }: any) => (
-        <Link href={`/recipes/${slug.current}`}>
-          <div key={_id}>
+    <CommonLayout>
+      <div>
+        {recipes.map(({ slug, name, _id, mainImage }: any) => (
+          <Link href={`/recipes/${slug.current}`} key={_id}>
             <p>{name}</p>
-          </div>
-        </Link>
-      ))}
-    </div>
+          </Link>
+        ))}
+      </div>
+    </CommonLayout>
   )
 }
 

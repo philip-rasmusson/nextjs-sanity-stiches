@@ -20,6 +20,27 @@ const recipeQuery = `*[_type == "recipe" && slug.current == $slug][0]{
       instructions
     }`
 
+export async function getStaticPaths() {
+  const paths = await sanityClient.fetch(
+    `*[_type == "recipe" && defined(slug.current)]{
+          "params": {
+            "slug": slug.current
+          }
+        }`
+  )
+
+  return {
+    paths,
+    fallback: true,
+  }
+}
+
+export async function getStaticProps({ params }: any) {
+  const { slug } = params
+  const recipe = await sanityClient.fetch(recipeQuery, { slug })
+  return { props: { data: { recipe }, preview: true } }
+}
+
 const ImageStyled = styled('img', {
   objectFit: 'cover',
   objectPosition: 'center center',
@@ -29,17 +50,30 @@ const ImageStyled = styled('img', {
   marginBottom: '2rem',
 })
 
+const ListItemStyled = styled('li', {
+  listStyle: 'none',
+  display: 'flex',
+
+  '& p': {
+    margin: '0',
+    lineHeight: '2rem',
+  },
+})
+
 export default function OneRecipe({ data, preview }: any) {
   const { data: recipe } = usePreviewSubscription(recipeQuery, {
     params: { slug: data.recipe?.slug.current },
     initialData: data,
     enabled: preview,
   })
+  console.log(data)
 
-  if (!data) return <div>Loading...</div>
-  return (
-    <article style={{ flexDirection: 'column', marginBottom: '2.5rem' }}>
-      <CommonLayout>
+  // if (!data) return <div>Loading...</div>
+  return !data ? (
+    <p>loddy</p>
+  ) : (
+    <CommonLayout>
+      <article style={{ flexDirection: 'column', marginBottom: '2.5rem' }}>
         {recipe.mainImage && (
           <ImageStyled
             src={urlFor(recipe?.mainImage).url()}
@@ -59,13 +93,11 @@ export default function OneRecipe({ data, preview }: any) {
             }}
           >
             <h3>Ingredienser</h3>
-            <ul style={{ display: 'flex', flexDirection: 'column' }}>
+            <ul
+              style={{ display: 'flex', flexDirection: 'column', padding: '0' }}
+            >
               {recipe?.ingredient?.map((ingredient: any) => (
-                <li
-                  key={ingredient._key}
-                  className='ingredient'
-                  style={{ listStyle: 'none' }}
-                >
+                <ListItemStyled key={ingredient._key} className='ingredient'>
                   <span style={{ width: '3rem' }}>
                     <p>{ingredient?.wholeNumber}</p>
                     <p>{ingredient?.fraction}</p>
@@ -74,7 +106,7 @@ export default function OneRecipe({ data, preview }: any) {
                     <p>{ingredient?.unit}</p>
                   </span>
                   <p>{ingredient?.ingredient?.name}</p>
-                </li>
+                </ListItemStyled>
               ))}
             </ul>
           </div>
@@ -85,29 +117,8 @@ export default function OneRecipe({ data, preview }: any) {
             </span>
           </div>
         </div>
-      </CommonLayout>
-    </article>
+      </article>
+    </CommonLayout>
   )
   // )
-}
-
-export async function getStaticPaths() {
-  const paths = await sanityClient.fetch(
-    `*[_type == "recipe" && defined(slug.current)]{
-      "params": {
-        "slug": slug.current
-      }
-    }`
-  )
-
-  return {
-    paths,
-    fallback: true,
-  }
-}
-
-export async function getStaticProps({ params }: any) {
-  const { slug } = params
-  const recipe = await sanityClient.fetch(recipeQuery, { slug })
-  return { props: { data: { recipe }, preview: true } }
 }

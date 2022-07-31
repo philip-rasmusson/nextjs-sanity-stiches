@@ -3,6 +3,7 @@ import React from 'react'
 
 const HeaderStyled = styled('header', {
   margin: '2rem 0',
+  fontFamily: '$system',
 })
 
 const DividerStyled = styled('div', {
@@ -12,15 +13,18 @@ const DividerStyled = styled('div', {
 })
 
 const LogoWrapperStyled = styled('div', {
+  padding: '0 2rem',
   '& h1': {
-    color: 'red',
+    color: '$red500',
   },
 })
 
 const NavbarStyled = styled('nav', {
+  paddingRight: '2rem',
   width: '100%',
   display: 'flex',
   flexDirection: 'row-reverse',
+  margin: '$1 $2',
 
   '& ul': {
     display: 'flex',
@@ -53,9 +57,9 @@ const Header = () => {
           <li>
             <a href='/recipes'>Recipes</a>
           </li>
-          <li>Blog</li>
-          <li>link</li>
-          <li>link</li>
+          <li>
+            <a href='/blog'>Blog</a>
+          </li>
         </ul>
       </NavbarStyled>
     </HeaderStyled>

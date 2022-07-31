@@ -6,6 +6,7 @@ import schemaTypes from 'all:part:@sanity/base/schema-type'
 import ingredient from './ingredient'
 import recipe from './recipe'
 import post from './post'
+import author from './author'
 // Then we give our schema to the builder and provide the result to Sanity
 export default createSchema({
   // We name our schema
@@ -16,6 +17,7 @@ export default createSchema({
     /* Your types here! */
     ingredient,
     recipe,
-    post
+    post,
+    author
   ]),
 })

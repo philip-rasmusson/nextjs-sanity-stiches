@@ -13,9 +13,7 @@ const FooterStyled = styled('footer', {
 const Footer: React.FC = () => {
   return (
     <FooterStyled>
-      <h4>
-        This is the <em>Footer</em>
-      </h4>
+      <h4>Ce n'est pas un pied</h4>
     </FooterStyled>
   )
 }

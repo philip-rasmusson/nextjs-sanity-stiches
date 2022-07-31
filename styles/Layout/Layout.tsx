@@ -6,4 +6,6 @@ export const CommonLayout = styled('main', {
   display: 'flex',
   flexGrow: '1',
   flexDirection: 'column',
+  verticalAlign: 'center',
+  padding: '0 2rem',
 })
